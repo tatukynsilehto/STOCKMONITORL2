@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     EditText editText2;
     String stockID = "";
     String stockName = "";
+    Toast AddID;
 
 
     @Override
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.user_list);
         editText = findViewById(R.id.editText);
         editText2 = findViewById(R.id.editText2);
+        AddID.makeText(MainActivity.this, "ADD VALUES", Toast.LENGTH_SHORT).show();
 
         StockPriceFetcher task = new StockPriceFetcher();
         task.execute();
@@ -61,8 +64,23 @@ public class MainActivity extends AppCompatActivity {
                                 stockName = editText2.getText().toString();
                                 stockID = editText.getText().toString();
                                 double jari = parseStockDataUser(data);
-                                arrayAdapter.add(stockName + " "+ jari + "");
-                            }
+                                    for (int i = 0; i < parseStockDataUser(data); i++) {
+                                        if (!editText2.getText().toString().equals(stockName)) {
+                                            Toast.makeText(MainActivity.this, "ADD STOCK NAME", Toast.LENGTH_SHORT).show();
+                                            break;}
+                                        else if (!editText.getText().toString().equals(stockID)) {
+                                            Toast.makeText(MainActivity.this, "ADD VALID STOCK ID", Toast.LENGTH_SHORT).show();
+                                            break;}
+                                        else if (editText.getText().toString().equals(stockID)) {
+                                            Toast.makeText(MainActivity.this, "STOCK " + stockName +  " ADDED SUCCESFULLY", Toast.LENGTH_SHORT).show();
+                                            arrayAdapter.add(stockName + " " + jari + "");
+                                            break;}
+                                        else if (editText.getText().toString().equals("") && editText2.getText().toString().equals("")){
+                                            AddID.makeText(MainActivity.this, "ADD VALUES", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        }
+                                    }
+                                }
                         });
 
                     }
@@ -83,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     double stockPrice = stock.getDouble("price");
                     stockDatas.add(" " + key + " " + stockPrice);
                     i++;
-                    if(i > 5){
+                    if(i > 6){
                         break;
                     }
 
