@@ -1,0 +1,2 @@
+rootProject.name='STOCKMONITOR3'
+include ':app'
